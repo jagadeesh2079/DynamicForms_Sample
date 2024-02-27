@@ -1,0 +1,40 @@
+<div [formGroup]="form"  class="container">
+  <label [attr.for]="question.key" *ngIf="question.key==='country' && question.show ==='false'? false: true">{{question.label}}</label>
+
+  <div [ngSwitch]="question.controlType">
+
+    <div *ngSwitchCase="'textbox'" >
+      <input   [formControlName]="question.key"
+      [id]="question.key" [type]="question.type">
+    </div>
+   
+    <div *ngSwitchCase="'dropdown'">
+    <select  #myselect *ngIf="question.key==='country' && question.show ==='false'? false: true" [id]="question.key"  [formControlName]="question.key" (change)="onPaymentMethodChange(myselect.value)">
+      <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+    </select>
+    </div>
+   
+    <div *ngSwitchCase="'radio'">
+      <div class="form-check form-check-inline" *ngFor="let opt of question.options">
+        <input  type="radio" [name]="question.key" [id]="opt.key" [value]="opt.value" [checked]="opt.checked">
+        <label> {{ opt.value }} </label>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'calnder'">
+    <input #myDate  type="date"  [formControlName]="question.key" [id]="question.key" (change)="onDate(myDate.value)">
+    </div>
+
+    <div *ngSwitchCase="'checkbox'">
+      <!-- <input  type="checkbox" [id]="question.key" (click)="onCheckBoxChange()"> -->
+      <label class="switch">
+        <input type="checkbox" [id]="question.key" (click)="onCheckBoxChange()">
+        <span class="slider round"></span>
+      </label>
+    </div>
+
+    <div class="errorMessage" *ngIf="!isValid">
+      {{question.label}} is required
+    </div>
+  </div>
+</div>
